@@ -1,0 +1,41 @@
+{% extends "layout.html" %}
+
+{% block title %}Wishlist{% endblock %}
+
+{% block content%}
+    <div class="text-center">
+        <h1>Amazon Wishlist</h1>
+        <form action="/wishlist" method="POST">
+            {{ form.csrf_token }}
+            <div class="form-group row pt-2">
+                <div class="col-md-2"></div>
+                <div class="col-md-2">
+                    <label for="amazonlink">{{form.amazonlink.label}}</label>
+                </div>
+                <div class="col-md-4">
+                    {{form.amazonlink(class="form-control")}}
+                </div>
+                <div class="col-md-1"><button class="btn btn-primary">Submit</button></div>
+                <div class="col-md-3"></div>
+            </div>
+        </form>
+        {% if form.amazonlink.errors %}
+            <ul class="errors">
+            {% for error in form.amazonlink.errors %}
+                <li>{{ error }}</li>
+            {% endfor %}
+            </ul>
+        {% endif %}
+        <hr>
+        {% if data %}
+            <!-- tables & stuff -->
+        {% else %}
+            <div class="jumbotron">
+                <h1 class="display-4">Welcome!</h1>
+                <p class="lead">This is a place where you can track your Amazon products and get notified if prices drop!</p>
+                <hr class="my-4">
+                <p>To get started, paste an Amazon link in the box above!</p>
+            </div>
+        {% endif %}
+    </div>
+{%endblock%}

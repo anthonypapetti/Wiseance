@@ -1,0 +1,16 @@
+from flask_wtf import FlaskForm
+from wtforms import StringField, SubmitField, PasswordField
+from wtforms.validators import DataRequired, Length, EqualTo
+from validators import UniqueRequired, VaildUsername, ValidPassword, ValidASIN
+
+class LoginForm(FlaskForm):
+    username = StringField("Username:", validators=[DataRequired(), VaildUsername], id="username")
+    password = PasswordField("Password:", validators=[DataRequired(), ValidPassword], id="password")
+
+class RegisterForm(FlaskForm):
+    username = StringField("Username:", validators=[DataRequired(), UniqueRequired, Length(min=5, max=25)], id="username")
+    password = PasswordField("Password:", validators=[DataRequired(), Length(min=8)], id="password")
+    confirmpassword = PasswordField("Confirm Password:", validators=[DataRequired(), EqualTo('password', message="Passwords don't match")], id="conpassword")
+
+class AddAmazonForm(FlaskForm):
+    amazonlink = StringField("Add A Product:", validators=[DataRequired(), ValidASIN], id="amazonlink")

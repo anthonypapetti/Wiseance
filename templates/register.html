@@ -1,0 +1,44 @@
+{% extends "layout.html" %}
+{%block title%}Register{%endblock%}
+
+{%block content%}
+    <h1>Sign Up</h1>
+    <p>Required <a class="text-danger">*</a></p>
+    <form action="/register" method="POST" class="needs-validation">
+        {{ form.csrf_token }}
+        <div class="form-group">
+            <label for="username">{{form.username.label}} <a class="text-danger">*</a></label>
+            {{form.username(class="form-control")}}
+            {% if form.username.errors %}
+                <ul class="errors">
+                {% for error in form.username.errors %}
+                    <li>{{ error }}</li>
+                {% endfor %}
+                </ul>
+            {% endif %}
+        </div>
+        <div class="form-group">
+            <label for="password">{{form.password.label}} <a class="text-danger">*</a></label>
+            {{form.password(class="form-control")}}
+            {% if form.password.errors %}
+                <ul class="errors">
+                {% for error in form.password.errors %}
+                    <li>{{ error }}</li>
+                {% endfor %}
+                </ul>
+            {% endif %}
+        </div>
+        <div class="form-group">
+            <label for="conpassword">{{form.confirmpassword.label}} <a class="text-danger">*</a></label>
+            {{form.confirmpassword(class="form-control")}}
+            {% if form.confirmpassword.errors %}
+                <ul class="errors">
+                {% for error in form.confirmpassword.errors %}
+                    <li>{{ error }}</li>
+                {% endfor %}
+                </ul>
+            {% endif %}
+        </div>
+        <button type="submit" class="btn btn-primary">Register</button>
+    </form>
+{%endblock%}
