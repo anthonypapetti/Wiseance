@@ -1,12 +1,14 @@
 from run import app, db
 from flask import render_template, session, redirect, request
 from forms import LoginForm, RegisterForm, AddAmazonForm
-from models import User
+from models import User, Product
 from werkzeug.security import generate_password_hash, check_password_hash
 from helpers import login_required, get_ASIN
 import requests
 from bs4 import BeautifulSoup
 import decimal
+
+decimal.getcontext().prec = 2
 
 @app.route("/")
 def index():
@@ -44,7 +46,6 @@ def register():
 @login_required
 def wishlist():
     form = AddAmazonForm()
-    data = None
     if form.validate_on_submit():
         #get simplified amazon link
         link = "https://www.amazon.com/"
@@ -68,8 +69,16 @@ def wishlist():
                 break
         
         #converts price into decimal
-        #takes the first of any $xprice - $yprice listings
-        #and gets rid of the $
+        #takes the first of any $xprice - $yprice listings and gets rid of the $
         regprice = regprice.split('-')[0].strip("$")
         print(regprice)
+
+        #add product to database
+        product = Product(user_id=session["user_id"], title=title, price=decimal.Decimal(regprice))
+        db.session.add(product)
+        db.session.commit()
+    
+    #get data to display in table
+    data = Product.query.filter_by(user_id=session["user_id"]).all()
+    print(data)
     return render_template("amazon.html", form=form, data=data)

@@ -16,3 +16,6 @@ class Product(db.Model):
     title = db.Column(db.Text, nullable=False)
     price = db.Column(db.Numeric(precision=11, scale=2), nullable=False)
     date_created = db.Column(db.DateTime, default=datetime.now())
+
+    def __repr__(self):
+        return f"<Product {self.title}>"
