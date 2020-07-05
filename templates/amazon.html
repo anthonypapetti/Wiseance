@@ -28,7 +28,26 @@
         {% endif %}
         <hr>
         {% if data %}
-            <p>OH YEAH</p>
+            <table class="table table-striped table-bordered">
+                <thead class="thead-dark">
+                    <tr>
+                        <th></th>
+                        <th>Product</th>
+                        <th>Current Price</th>
+                        <th>You Save</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for row in data %}
+                        <tr>
+                            <td><a href="#"><i class="fa fa-trash-o"></i></a></td>
+                            <td>{{row.title}}</td>
+                            <td>{{row.price}}</td>
+                            <td>Placeholder</td>
+                        </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
         {% else %}
             <div class="jumbotron">
                 <h1 class="display-4">Welcome!</h1>
