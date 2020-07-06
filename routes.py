@@ -1,6 +1,6 @@
 from run import app, db
 from flask import render_template, session, redirect, request
-from forms import LoginForm, RegisterForm, AddAmazonForm
+from forms import LoginForm, RegisterForm, AddAmazonForm, DeleteAmazonForm
 from models import User, Product
 from werkzeug.security import generate_password_hash, check_password_hash
 from helpers import login_required, get_ASIN
@@ -46,39 +46,47 @@ def register():
 @login_required
 def wishlist():
     form = AddAmazonForm()
-    if form.validate_on_submit():
-        #get simplified amazon link
-        link = "https://www.amazon.com/"
-        extension = get_ASIN(form.amazonlink.data)
-        extension = extension.group(0)
-        link = link + extension
+    if form.is_submitted():
+        if form.validate_on_submit():
+            #get simplified amazon link
+            link = "https://www.amazon.com/"
+            extension = get_ASIN(form.amazonlink.data)
+            extension = extension.group(0)
+            link = link + extension
 
-        #scrape price and product title from page
-        #gets amazon page
-        page = requests.get(link, headers=app.config["REQUEST_HEADERS"])
-        #initializes scraper
-        soup = BeautifulSoup(page.content, "html.parser")
+            #scrape price and product title from page
+            #gets amazon page
+            page = requests.get(link, headers=app.config["REQUEST_HEADERS"])
+            #initializes scraper
+            soup = BeautifulSoup(page.content, "html.parser")
 
-        #gets title and page
-        title = soup.find(id="productTitle").get_text().strip()
-        amazon_price_ids = ["price_inside_buybox", "priceblock_ourprice", "priceblock_dealprice", "price", "newBuyBoxPrice"]
-        for id in amazon_price_ids:
-            regprice = soup.find(id=id)
-            if regprice:
-                regprice = regprice.get_text().strip()
-                break
-        
-        #converts price into decimal
-        #takes the first of any $xprice - $yprice listings and gets rid of the $
-        regprice = regprice.split('-')[0].strip("$")
-        print(regprice)
+            #gets title and page
+            title = soup.find(id="productTitle").get_text().strip()
+            amazon_price_ids = ["price_inside_buybox", "priceblock_ourprice", "priceblock_dealprice", "price", "newBuyBoxPrice"]
+            for id in amazon_price_ids:
+                regprice = soup.find(id=id)
+                if regprice:
+                    regprice = regprice.get_text().strip()
+                    break
+            
+            #converts price into decimal
+            #takes the first of any $xprice - $yprice listings and gets rid of the $
+            regprice = regprice.split('-')[0].strip("$")
+            print(regprice)
 
-        #add product to database
-        product = Product(user_id=session["user_id"], title=title, price=decimal.Decimal(regprice))
-        db.session.add(product)
-        db.session.commit()
+            #add product to database
+            product = Product(user_id=session["user_id"], title=title, price=decimal.Decimal(regprice))
+            db.session.add(product)
+            db.session.commit()
     
     #get data to display in table
     data = Product.query.filter_by(user_id=session["user_id"]).all()
     print(data)
+
     return render_template("amazon.html", form=form, data=data)
+
+
+@app.route("/deleteamazon", methods=["GET", "POST"])
+@login_required
+def deleteamazon():
+    pass

@@ -14,3 +14,6 @@ class RegisterForm(FlaskForm):
 
 class AddAmazonForm(FlaskForm):
     amazonlink = StringField("Add A Product:", validators=[DataRequired(), ValidASIN], id="amazonlink")
+
+class DeleteAmazonForm(FlaskForm):
+    pass

@@ -1,6 +1,7 @@
 {% extends "layout.html" %}
 
 {% block title %}Wishlist{% endblock %}
+{% block scripts %}<script src="{{url_for('static' filename='wishlist.js')}}"></script>{% endblock %}
 
 {% block content%}
     <div class="text-center">
@@ -38,11 +39,13 @@
                     </tr>
                 </thead>
                 <tbody>
-                    {% for row in data %}
+                    {% for i in range(data|length) %}
                         <tr>
-                            <td><a href="#"><i class="fa fa-trash-o"></i></a></td>
-                            <td>{{row.title}}</td>
-                            <td>{{row.price}}</td>
+                            <td>
+                                <button class="btn fa fa-trash-o" type="button"></button>
+                            </td>
+                            <td>{{data[i].title}}</td>
+                            <td>${{data[i].price}}</td>
                             <td>Placeholder</td>
                         </tr>
                     {% endfor %}
