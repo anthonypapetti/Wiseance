@@ -3,7 +3,7 @@ from flask import render_template, session, redirect, request, jsonify
 from forms import LoginForm, RegisterForm, AddAmazonForm, DeleteAmazonForm
 from models import User, Product
 from werkzeug.security import generate_password_hash, check_password_hash
-from helpers import login_required, get_ASIN
+from helpers import login_required, get_ASIN, get_amzn_data
 import requests
 from bs4 import BeautifulSoup
 import decimal
@@ -55,27 +55,15 @@ def wishlist():
             link = link + extension
 
             #scrape price and product title from page
-            #gets amazon page
-            page = requests.get(link, headers=app.config["REQUEST_HEADERS"])
-            #initializes scraper
-            soup = BeautifulSoup(page.content, "html.parser")
-
-            #gets title and page
-            title = soup.find(id="productTitle").get_text().strip()
-            amazon_price_ids = ["price_inside_buybox", "priceblock_ourprice", "priceblock_dealprice", "price", "newBuyBoxPrice"]
-            for id in amazon_price_ids:
-                regprice = soup.find(id=id)
-                if regprice:
-                    regprice = regprice.get_text().strip()
-                    break
+            productdata = get_amzn_data(link)
             
             #converts price into decimal
             #takes the first of any $xprice - $yprice listings and gets rid of the $
-            regprice = regprice.split('-')[0].strip("$")
-            print(regprice)
+            productdata["regprice"] = productdata["regprice"].split('-')[0].strip("$")
+            print(productdata["regprice"])
 
             #add product to database
-            product = Product(user_id=session["user_id"], title=title, price=decimal.Decimal(regprice))
+            product = Product(user_id=session["user_id"], title=productdata["title"], price=decimal.Decimal(productdata["regprice"]))
             db.session.add(product)
             db.session.commit()
     

@@ -1,7 +1,9 @@
 from flask import session, redirect
 from functools import wraps
 import re
-
+import requests
+from bs4 import BeautifulSoup
+from run import app
 def login_required(f):
     """
     Decorate routes to require login.
@@ -21,5 +23,22 @@ def get_ASIN(url):
     if ASIN: ASIN.group().split('/')[1]
     else: raise Exception("Not a valid link")
     return ASIN
+
+def get_amzn_data(link):
+    #scrape price and product title from page
+    #gets amazon page
+    page = requests.get(link, headers=app.config["REQUEST_HEADERS"])
+    #initializes scraper
+    soup = BeautifulSoup(page.content, "html.parser")
+
+    #gets title and page
+    title = soup.find(id="productTitle").get_text().strip()
+    amazon_price_ids = ["price_inside_buybox", "priceblock_ourprice", "priceblock_dealprice", "price", "newBuyBoxPrice"]
+    for id in amazon_price_ids:
+        regprice = soup.find(id=id)
+        if regprice:
+            regprice = regprice.get_text().strip()
+            break
+    return {"title":title,"regprice":regprice}
 
 
