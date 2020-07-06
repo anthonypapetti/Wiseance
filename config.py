@@ -1,5 +1,6 @@
 DEBUG = True
 SQLALCHEMY_DATABASE_URI = "sqlite:///db.sqlite3"
+SQLALCHEMY_TRACK_MODIFICATIONS = False
 SECRET_KEY = "\x07\xaa\x82\x1a\x16\xaa\xfe\x80\xaa\xd6"
 TEMPLATES_AUTO_RELOAD = True
 WTF_CSRF_SECRET_KEY = 'rdyctfvgyhjkhnbgiudyrtuycivuobnhytuy2345678976543./'

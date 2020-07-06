@@ -1,5 +1,5 @@
 from run import app, db
-from flask import render_template, session, redirect, request
+from flask import render_template, session, redirect, request, jsonify
 from forms import LoginForm, RegisterForm, AddAmazonForm, DeleteAmazonForm
 from models import User, Product
 from werkzeug.security import generate_password_hash, check_password_hash
@@ -86,7 +86,17 @@ def wishlist():
     return render_template("amazon.html", form=form, data=data)
 
 
-@app.route("/deleteamazon", methods=["GET", "POST"])
+@app.route("/deleteamazon", methods=["GET"])
 @login_required
 def deleteamazon():
-    pass
+    title = request.args.get("name")
+    title = title.strip()
+    print(title)
+    data = Product.query.filter_by(title=title).first()
+    print(data)
+    if not data:
+        return jsonify(False)
+    
+    db.session.delete(data)
+    db.session.commit()
+    return jsonify(True)
