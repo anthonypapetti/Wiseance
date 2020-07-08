@@ -29,7 +29,7 @@ def get_amzn_data(link):
     #gets amazon page
     page = requests.get(link, headers=app.config["REQUEST_HEADERS"])
     #initializes scraper
-    soup = BeautifulSoup(page.content, "html.parser")
+    soup = BeautifulSoup(page.content, "lxml")
 
     #gets title and page
     title = soup.find(id="productTitle").get_text().strip()
