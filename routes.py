@@ -6,6 +6,7 @@ from werkzeug.security import generate_password_hash, check_password_hash
 from helpers import login_required, get_ASIN, get_amzn_data
 import requests
 from bs4 import BeautifulSoup
+from decimal import Decimal
 import decimal
 
 decimal.getcontext().prec = 2
@@ -46,13 +47,16 @@ def register():
 @login_required
 def wishlist():
     form = AddAmazonForm()
+    linkprefix = "https://www.amazon.com/"
     if form.is_submitted():
         if form.validate_on_submit():
             #get simplified amazon link
-            link = "https://www.amazon.com/"
             extension = get_ASIN(form.amazonlink.data)
             extension = extension.group(0)
-            link = link + extension
+            link = linkprefix + extension
+
+            #reset form
+            form.amazonlink.data = ''
 
             #scrape price and product title from page
             productdata = get_amzn_data(link)
@@ -63,15 +67,38 @@ def wishlist():
             print(productdata["regprice"])
 
             #add product to database
-            product = Product(user_id=session["user_id"], title=productdata["title"], price=decimal.Decimal(productdata["regprice"]))
+            product = Product(session["user_id"], productdata["title"], Decimal(productdata["regprice"]), link)
             db.session.add(product)
             db.session.commit()
     
     #get data to display in table
-    data = Product.query.filter_by(user_id=session["user_id"]).all()
+    data = Product.query.filter_by(user_id=session["user_id"]).order_by(Product.date_created.desc()).all()
     print(data)
 
-    return render_template("amazon.html", form=form, data=data)
+    #get sale data
+    sales = []
+    for item in data:
+        #gets scrape data for item
+        scrapeextension = get_ASIN(item.amznlink)
+        scrapelink = linkprefix + scrapeextension.group(0)
+        scrapedata = get_amzn_data(scrapelink)
+        scrapedata["regprice"] = scrapedata["regprice"].strip("$")
+
+        #if price are the same, do nothing
+        if Decimal(scrapedata["regprice"]) == Decimal(item.price):
+            sales.append("No sale")
+        #if prices are higher, update to that higher price
+        if Decimal(scrapedata["regprice"]) > Decimal(item.price):
+            item.price = Decimal(scrapedata["price"])
+            db.commit()
+            sales.append("No sale")
+        #if prices are lower, show a sale
+        if Decimal(scrapedata["regprice"]) < Decimal(item.price):
+            salepercent = str(1 - (Decimal(item.price) / Decimal(scrapedata["regprice"]))).strip("-")
+            salepercent = f"{salepercent[2:4]}%"
+            sales.append(salepercent)
+
+    return render_template("amazon.html", form=form, data=data, sales=sales)
 
 
 @app.route("/deleteamazon", methods=["GET"])

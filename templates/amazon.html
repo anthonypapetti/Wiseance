@@ -34,8 +34,8 @@
                     <tr>
                         <th></th>
                         <th>Product</th>
-                        <th>Current Price</th>
-                        <th>You Save</th>
+                        <th>Original Price</th>
+                        <th>Current Sale</th>
                     </tr>
                 </thead>
                 <tbody>
@@ -44,9 +44,9 @@
                             <td>
                                 <button class="btn btn-link fa fa-trash-o" type="button"></button>
                             </td>
-                            <td id="title">{{data[i].title}}</td>
+                            <td id="title"><a href="{{data[i].amznlink}}">{{data[i].title}}</a></td>
                             <td>${{data[i].price}}</td>
-                            <td>Placeholder</td>
+                            <td>{{sales[i]}}</td>
                         </tr>
                     {% endfor %}
                 </tbody>
