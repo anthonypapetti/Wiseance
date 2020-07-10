@@ -3,3 +3,8 @@ ul.errors
     list-style-type: none;
     color: red;
 }
+a.linkerror
+{
+    color: red;
+    text-decoration: underline;
+}

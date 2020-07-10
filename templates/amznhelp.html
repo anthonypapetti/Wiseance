@@ -1,0 +1,34 @@
+{% extends "layout.html" %}
+
+{% block title %}Wishlist Help{% endblock %}
+
+
+{% block content %}
+    <div class="text-center">
+        <h1>Common Wishlist Problems</h1>
+    </div>
+    <ul>
+        <li>I put in an (Ebay, Alibaba, Wayfair, etc.) link, and it said it was invalid!</li>
+        <ul>
+            <li>At the moment, this site only supports amazon products, I apologize for any inconvenience.</li>
+        </ul>
+        <li>I put in a perfectly valid amazon link, and it still said it was invlaid!</li>
+        <ul>
+            <li class="pb-3">Most "invalid link" errors come from a single problem with the way amazon displays it's links. When you click on a product in most
+                contexts (such as a search, reccomended page, etc.), it displays a valid URL like so:
+                <img src="{{url_for('static', filename='images/goodamzn.png', version=2)}}" class="img img-responsive">
+                </br>
+                Notice the "dp", which usually indicates that it's a valid link.
+            </li>
+            <li class="pb-3">However, whenever you click on an amazon product in certain contexts related to your profile (order history, recently viewed, etc.),
+                it displays it's link differently:
+                <img src="{{url_for('static', filename='images/badamzn.png')}}" class="img img-responsive">
+                </br>
+                If you see the "gp", that's a good sign your link is invalid
+            </li>
+            <li>
+                To solve this problem, copy and paste the product title into the search bar, and click on the product from there
+            </li>
+        </ul>
+    </ul>
+{% endblock %}

@@ -23,7 +23,7 @@
         {% if form.amazonlink.errors %}
             <ul class="errors">
             {% for error in form.amazonlink.errors %}
-                <li>{{ error }}</li>
+                <li>{{ error }}: <a class="linkerror" href="{{url_for('amznhelp')}}">Find out why</a></li>
             {% endfor %}
             </ul>
         {% endif %}
