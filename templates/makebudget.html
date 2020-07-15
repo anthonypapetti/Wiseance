@@ -1,0 +1,69 @@
+{% extends "layout.html" %}
+
+{% block title %}Make budget{% endblock %}
+
+{% block content %}
+    <div class="text-center">
+        <h1>Make Your Budget!</h1>
+    </div>
+    <form action="/makebudget" method="POST">
+        {{form.csrf_token}}
+        <!--Form Element 1-->
+        <div class="row">
+            <div class="col-lg-5"></div>
+            <div class="col-lg-2">
+                <div class="form-group">
+                    <label>{{form.monthlyincome.label}}</label>
+                    {{form.monthlyincome(class="form-control")}}
+                    {% if form.monthlyincome.errors %}
+                        <ul class="errors">
+                            {% for error in form.monthlyincome.errors %}
+                                <li>{{error}}</li>
+                            {% endfor %}
+                        </ul>
+                    {% endif %}
+                </div>
+            </div>
+            <div class="col-lg-5"></div>
+        </div>
+        <!--Form Element 2-->
+        <div class="row">
+            <div class="col-lg-5"></div>
+            <div class="col-lg-2">
+                <div class="form-group">
+                    <label>{{form.fixedexpenses.label}}</label>
+                    {{form.fixedexpenses(class="form-control")}}
+                    {% if form.fixedexpenses.errors %}
+                        <ul class="errors">
+                            {% for error in form.fixedexpenses.errors %}
+                                <li>{{error}}</li>
+                            {% endfor %}
+                        </ul>
+                    {% endif %}
+                </div>
+            </div>
+            <div class="col-lg-5"></div>
+        </div>
+        <!--Form Element 3-->
+        <div class="row">
+            <div class="col-lg-5"></div>
+            <div class="col-lg-2">
+                <div class="form-group">
+                    <label>{{form.percentsavings.label}}</label>
+                    {{form.percentsavings(class="form-control")}}
+                    {% if form.percentsavings.errors %}
+                        <ul class="errors">
+                            {% for error in form.percentsavings.errors %}
+                                <li>{{error}}</li>
+                            {% endfor %}
+                        </ul>
+                    {% endif %}
+                </div>
+            </div>
+            <div class="col-lg-5"></div>
+        </div>
+        <div class="text-center">
+            <button type="submit" class="btn btn-primary">Submit</button>
+        </div>
+    </form>
+{% endblock %}

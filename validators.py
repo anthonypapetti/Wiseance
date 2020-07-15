@@ -25,3 +25,13 @@ def ValidPassword(form, field):
 def ValidASIN(form, field):
     ASIN = re.search('(?:dp|o|gp|-)\/(B[0-9]{2}[0-9A-Z]{7}|[0-9]{9}(?:X|[0-9]))', field.data)
     if not ASIN: raise ValidationError("Not A Valid Amazon Link")
+
+# def ValidSavings(form, field):
+#     savings_percent = int(form.fixedexpenses.data) / int(form.monthlyincome.data)
+#     if int(field.data) < 10:
+#         datatrail = '0' + field.data
+#     else:
+#         datatrail = field.data
+
+#     if savings_percent + int('0.' + datatrail) > 1:
+#         raise ValidationError("Not enough money left for that ")

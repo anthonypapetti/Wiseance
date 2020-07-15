@@ -1,6 +1,6 @@
 from run import app, db
 from flask import render_template, session, redirect, request, jsonify
-from forms import LoginForm, RegisterForm, AddAmazonForm, DeleteAmazonForm
+from forms import LoginForm, RegisterForm, AddAmazonForm, AddBudgetForm
 from models import User, Product
 from werkzeug.security import generate_password_hash, check_password_hash
 from helpers import login_required, get_ASIN, get_amzn_data
@@ -122,3 +122,9 @@ def deleteamazon():
 @login_required
 def amznhelp():
     return render_template("amznhelp.html")
+
+@app.route("/makebudget", methods=["GET", "POST"])
+@login_required
+def makebudget():
+    form = AddBudgetForm()
+    return render_template("makebudget.html", form=form)
