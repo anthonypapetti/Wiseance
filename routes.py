@@ -95,8 +95,9 @@ def wishlist():
             sales.append("No sale")
         #if prices are lower, show a sale
         if Decimal(scrapedata["regprice"]) < Decimal(item.price):
-            salepercent = str(1 - (Decimal(item.price) / Decimal(scrapedata["regprice"]))).strip("-")
+            salepercent = str(1 - (Decimal(scrapedata["regprice"]) / Decimal(item.price))).strip("-")
             salepercent = f"{salepercent[2:4]}%"
+            salepercent = salepercent.lstrip("0")
             sales.append(salepercent)
 
     return render_template("amazon.html", form=form, data=data, sales=sales)
