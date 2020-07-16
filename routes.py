@@ -24,6 +24,7 @@ def login():
     if form.validate_on_submit():
         user = User.query.filter_by(username=form.username.data).first()
         session["user_id"] = user.id
+        session["username"] = user.username
         return redirect('/')
     return render_template("login.html", form=form)
 
