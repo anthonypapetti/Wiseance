@@ -1,9 +1,9 @@
 from run import app, db
 from flask import render_template, session, redirect, request, jsonify
 from forms import LoginForm, RegisterForm, AddAmazonForm, AddBudgetForm
-from models import User, Product
+from models import User, Product, Budget
 from werkzeug.security import generate_password_hash, check_password_hash
-from helpers import login_required, get_ASIN, get_amzn_data
+from helpers import login_required, get_ASIN, get_amzn_data, percentify
 import requests
 from bs4 import BeautifulSoup
 from decimal import Decimal
@@ -42,6 +42,7 @@ def register():
         db.session.add(user)
         db.session.commit()
         session["user_id"] = user.id
+        session["username"] = user.username
         return redirect("/")
     return render_template("register.html", form=form)
 
@@ -128,4 +129,28 @@ def amznhelp():
 @login_required
 def makebudget():
     form = AddBudgetForm()
+    if form.validate_on_submit():
+        #Get data
+        #amount of money to save
+        saving_money = Decimal(form.monthlyincome.data) * percentify(form.percentsavings.data)
+        #amount of money to spend
+        spending_money = Decimal(form.monthlyincome.data) - Decimal(form.fixedexpenses.data) - saving_money
+        print(f"Savings: {saving_money}, Spending: {spending_money}")
+
+        #Save data to budget
+        #check if data already exist
+        otherbudget = Budget.query.filter_by(user_id=session["user_id"]).first()
+        if otherbudget:
+            #change data
+            otherbudget.income = form.monthlyincome.data
+            otherbudget.fixed_expenses = form.fixedexpenses.data
+            otherbudget.saving_money = saving_money
+            otherbudget.spending_money = spending_money
+            #commit changes
+            db.session.commit()
+        else:
+            #create new budget
+            mybudget = Budget(user_id=session["user_id"], income=form.monthlyincome.data, fixed_expenses=form.fixedexpenses.data, saving_money=saving_money, spending_money=spending_money)
+            db.session.add(mybudget)
+            db.session.commit()
     return render_template("makebudget.html", form=form)

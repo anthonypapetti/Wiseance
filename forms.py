@@ -1,7 +1,7 @@
 from flask_wtf import FlaskForm, RecaptchaField, Recaptcha
-from wtforms import StringField, SubmitField, PasswordField, DecimalField, IntegerField
+from wtforms import StringField, SubmitField, PasswordField, DecimalField
 from wtforms.validators import DataRequired, Length, EqualTo, NumberRange
-from validators import UniqueRequired, VaildUsername, ValidPassword, ValidASIN
+from validators import UniqueRequired, VaildUsername, ValidPassword, ValidASIN, ValidSavings
 
 class LoginForm(FlaskForm):
     username = StringField("Username:", validators=[DataRequired(), VaildUsername], id="username")
@@ -17,6 +17,6 @@ class AddAmazonForm(FlaskForm):
     amazonlink = StringField("Add A Product:", validators=[DataRequired(), ValidASIN], id="amazonlink")
 
 class AddBudgetForm(FlaskForm):
-    monthlyincome = IntegerField("Monthly Income:", validators=[DataRequired()])
+    monthlyincome = DecimalField("Monthly Income:", validators=[DataRequired()])
     fixedexpenses = DecimalField("Fixed Expenses:", validators=[DataRequired()], places=2)
-    percentsavings = IntegerField(r"% of income to save:", validators=[DataRequired(), NumberRange(min=1, max=99)])
+    percentsavings = DecimalField(r"% of income to save:", validators=[DataRequired(), NumberRange(min=1, max=99), ValidSavings])

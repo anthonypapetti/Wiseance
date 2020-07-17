@@ -26,3 +26,12 @@ class Product(db.Model):
 
     def __repr__(self):
         return f"<Product {self.title}>"
+
+class Budget(db.Model):
+    id = db.Column(db.Integer, primary_key=True)
+    user_id = db.Column(db.Integer, nullable=False)
+    income = db.Column(db.Numeric, nullable=False)
+    fixed_expenses = db.Column(db.Numeric, nullable=False)
+    saving_money = db.Column(db.Numeric, nullable=False)
+    spending_money = db.Column(db.Numeric, nullable=False)
+    date_created = db.Column(db.DateTime, default=datetime.now())

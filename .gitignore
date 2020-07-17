@@ -3,3 +3,4 @@ todo.txt
 env
 __pycache__
 test.py
+config.json
