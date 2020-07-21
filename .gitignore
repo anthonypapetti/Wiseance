@@ -4,3 +4,5 @@ env
 __pycache__
 test.py
 config.json
+static/images/budget_charts/*
+!static/images/budget_charts/.gitkeep
