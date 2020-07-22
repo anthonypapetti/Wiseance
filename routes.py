@@ -184,3 +184,14 @@ def viewbudget():
         mybudget.spending_left -= form.money.data
         db.session.commit()
     return render_template("viewbudget.html", form=form, img_path=img_path, data = mybudget)
+
+@app.route("/resetbudget", methods=["GET", "POST"])
+@login_required
+def resetbudget():
+    mybudget = Budget.query.filter_by(user_id=session["user_id"]).first()
+    if mybudget:
+        mybudget.spending_left = mybudget.spending_money
+        db.session.commit()
+        return jsonify("${0:.2f}".format(mybudget.spending_money))
+    else:
+        return jsonify(False)

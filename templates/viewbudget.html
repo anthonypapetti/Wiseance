@@ -1,6 +1,7 @@
 {% extends "layout.html" %}
 
 {% block title %}View Budget{% endblock %}
+{% block scripts %}<script src="{{url_for('static', filename='js/budget.js', version=2)}}"></script>{% endblock %}
 
 {% block content %}
     <div class="text-center">
@@ -13,20 +14,28 @@
             {% else %}
                 <h2>You have {{data.spending_left|usd}} left to spend:</h2>
             {% endif %}
-        {% endif %}
-        <form action="/viewbudget" method="POST">
-            {{form.csrf_token}}
-            <div class="form-group">
-                <div class="row">
-                    <div class="col-lg-5"></div>
-                    <div class="col-lg-2">
-                        <label>{{form.money.label}}</label>
-                        {{form.money(class="form-control")}}
+            <form action="/viewbudget" method="POST">
+                {{form.csrf_token}}
+                <div class="form-group">
+                    <div class="row">
+                        <div class="col-lg-5"></div>
+                        <div class="col-lg-2">
+                            <label>{{form.money.label}}</label>
+                            {{form.money(class="form-control")}}
+                        </div>
+                        <div class="col-lg-5"></div>
                     </div>
-                    <div class="col-lg-5"></div>
                 </div>
+                <button type="submit" class="btn btn-primary">Submit</button>
+            </form>
+            <div class="p-2">
+                <button type="button" class="btn btn-primary" id="resetbutton">Reset</button>
             </div>
-            <button type="submit" class="btn btn-primary">Submit</button>
-        </form>
-        </div>
+            <div class="p-2">
+                <a href="/makebudget">
+                    <button type="button" class="btn btn-primary">Change Budget</button>
+                </a>
+            </div>
+        {% endif %}
+    </div>
 {% endblock %}
