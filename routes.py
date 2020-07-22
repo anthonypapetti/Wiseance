@@ -1,15 +1,17 @@
 from run import app, db
 from flask import render_template, session, redirect, request, jsonify
-from forms import LoginForm, RegisterForm, AddAmazonForm, AddBudgetForm
+from forms import LoginForm, RegisterForm, AddAmazonForm, AddBudgetForm, BuyForm
 from models import User, Product, Budget
 from werkzeug.security import generate_password_hash, check_password_hash
-from helpers import login_required, get_ASIN, get_amzn_data, percentify
+from helpers import login_required, get_ASIN, get_amzn_data, percentify, make_budget_chart, is_negative
 import requests
 from bs4 import BeautifulSoup
 from decimal import Decimal
 import decimal
+from datetime import datetime
 
 decimal.getcontext().prec = 2
+app.jinja_env.filters["is_negative"] = is_negative
 
 @app.route("/")
 def index():
@@ -138,19 +140,42 @@ def makebudget():
         print(f"Savings: {saving_money}, Spending: {spending_money}")
 
         #Save data to budget
-        #check if data already exist
+        #check if data already exists
         otherbudget = Budget.query.filter_by(user_id=session["user_id"]).first()
+        now = datetime.now()
+        img_name =f"{session['user_id']}{now.year}{now.month}{now.day}{now.hour}{now.minute}.png"
         if otherbudget:
             #change data
             otherbudget.income = form.monthlyincome.data
             otherbudget.fixed_expenses = form.fixedexpenses.data
             otherbudget.saving_money = saving_money
             otherbudget.spending_money = spending_money
+            otherbudget.spending_left = spending_money
+            otherbudget.graph_link = img_name
             #commit changes
             db.session.commit()
+            make_budget_chart(otherbudget)
+        #if budget does not exist
         else:
             #create new budget
-            mybudget = Budget(user_id=session["user_id"], income=form.monthlyincome.data, fixed_expenses=form.fixedexpenses.data, saving_money=saving_money, spending_money=spending_money)
+            mybudget = Budget(user_id=session["user_id"], income=form.monthlyincome.data, fixed_expenses=form.fixedexpenses.data, saving_money=saving_money,
+            spending_money=spending_money, spending_left=spending_money, graph_link=img_name)
+
             db.session.add(mybudget)
             db.session.commit()
+            make_budget_chart(mybudget)
+        
+        return redirect("/viewbudget")
     return render_template("makebudget.html", form=form)
+
+@app.route("/viewbudget", methods=["GET", "POST"])
+@login_required
+def viewbudget():
+    form = BuyForm()
+    #get budget data
+    mybudget = Budget.query.filter_by(user_id=session["user_id"]).first()
+    if mybudget:
+        img_path = f"images/budget_charts/{mybudget.graph_link}"
+    else:
+        img_path = None
+    return render_template("viewbudget.html", form=form, img_path=img_path, data = mybudget)

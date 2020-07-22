@@ -7,6 +7,8 @@ from run import app
 from decimal import Decimal
 from matplotlib import pyplot as plt
 from flask import session
+from datetime import datetime
+import os
 
 #decorator for login validation
 def login_required(f):
@@ -58,12 +60,19 @@ def percentify(x):
 
 #takes in a SQLALCHEMY Budget object, saves a pie chart in static/images/budget_charts
 def make_budget_chart(budget):
+
     plt.style.use("fivethirtyeight")
     labels = ["Fixed expenses", "Saving Money", "Spending Money"]
     slices = [budget.fixed_expenses, budget.saving_money, budget.spending_money]
     
-    plt.pie(slices, labels=labels, wedgeprops={"edgecolor": "black"}, autopct='$%i')
+    plt.pie(slices, labels=labels, wedgeprops={"edgecolor": "black"}, autopct='%1.1f%%')
 
     plt.title("My Budget")
     plt.tight_layout()
-    plt.savefig(f"{session['user_id']}.png")
+    now = datetime.now()
+    plt.savefig(f"static/images/budget_charts/{session['user_id']}{now.year}{now.month}{now.day}{now.hour}{now.minute}.png")
+
+def is_negative(x):
+    if x < 0:
+        return True
+    return False

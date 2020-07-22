@@ -34,4 +34,6 @@ class Budget(db.Model):
     fixed_expenses = db.Column(db.Numeric, nullable=False)
     saving_money = db.Column(db.Numeric, nullable=False)
     spending_money = db.Column(db.Numeric, nullable=False)
+    spending_left = db.Column(db.Numeric, nullable=False)
+    graph_link = db.Column(db.Text, nullable=False)
     date_created = db.Column(db.DateTime, default=datetime.now())

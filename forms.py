@@ -20,3 +20,6 @@ class AddBudgetForm(FlaskForm):
     monthlyincome = DecimalField("Monthly Income:", validators=[DataRequired()])
     fixedexpenses = DecimalField("Fixed Expenses:", validators=[DataRequired()], places=2)
     percentsavings = DecimalField(r"% of income to save:", validators=[DataRequired(), NumberRange(min=1, max=99), ValidSavings])
+
+class BuyForm(FlaskForm):
+    money = DecimalField("", validators=[DataRequired()])

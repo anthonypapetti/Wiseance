@@ -1,0 +1,17 @@
+{% extends "layout.html" %}
+
+{% block title %}View Budget{% endblock %}
+
+{% block content %}
+    {% if data %}
+        <div class="text-center">
+            <h1>Current Budget</h1>
+            <img src="{{ url_for('static', filename=img_path) }}">
+        </div>
+        {% if data.spending_left|is_negative is sameas true %}
+            <p>Negative</p>
+        {% else %}
+            <p>Positive</p>
+        {% endif %}
+    {% endif %}
+{% endblock %}
