@@ -3,7 +3,7 @@ from flask import render_template, session, redirect, request, jsonify
 from forms import LoginForm, RegisterForm, AddAmazonForm, AddBudgetForm, BuyForm
 from models import User, Product, Budget
 from werkzeug.security import generate_password_hash, check_password_hash
-from helpers import login_required, get_ASIN, get_amzn_data, percentify, make_budget_chart, is_negative
+from helpers import login_required, get_ASIN, get_amzn_data, percentify, make_budget_chart, is_negative, usd
 import requests
 from bs4 import BeautifulSoup
 from decimal import Decimal
@@ -12,6 +12,7 @@ from datetime import datetime
 
 decimal.getcontext().prec = 2
 app.jinja_env.filters["is_negative"] = is_negative
+app.jinja_env.filters["usd"] = usd
 
 @app.route("/")
 def index():
@@ -178,4 +179,8 @@ def viewbudget():
         img_path = f"images/budget_charts/{mybudget.graph_link}"
     else:
         img_path = None
+    if form.validate_on_submit():
+        print("REEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEE")
+        mybudget.spending_left -= form.money.data
+        db.session.commit()
     return render_template("viewbudget.html", form=form, img_path=img_path, data = mybudget)

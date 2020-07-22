@@ -3,15 +3,30 @@
 {% block title %}View Budget{% endblock %}
 
 {% block content %}
-    {% if data %}
-        <div class="text-center">
-            <h1>Current Budget</h1>
-            <img src="{{ url_for('static', filename=img_path) }}">
-        </div>
-        {% if data.spending_left|is_negative is sameas true %}
-            <p>Negative</p>
-        {% else %}
-            <p>Positive</p>
+    <div class="text-center">
+        {% if data %}
+                <h1>Current Budget</h1>
+                <img src="{{ url_for('static', filename=img_path) }}">
+            
+            {% if data.spending_left|is_negative is sameas true %}
+                <h2>You've spent {{data.spending_left|usd}} too much:</h2>
+            {% else %}
+                <h2>You have {{data.spending_left|usd}} left to spend:</h2>
+            {% endif %}
         {% endif %}
-    {% endif %}
+        <form action="/viewbudget" method="POST">
+            {{form.csrf_token}}
+            <div class="form-group">
+                <div class="row">
+                    <div class="col-lg-5"></div>
+                    <div class="col-lg-2">
+                        <label>{{form.money.label}}</label>
+                        {{form.money(class="form-control")}}
+                    </div>
+                    <div class="col-lg-5"></div>
+                </div>
+            </div>
+            <button type="submit" class="btn btn-primary">Submit</button>
+        </form>
+        </div>
 {% endblock %}

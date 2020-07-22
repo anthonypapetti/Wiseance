@@ -76,3 +76,6 @@ def is_negative(x):
     if x < 0:
         return True
     return False
+
+def usd(x):
+    return "${0:.2f}".format(x)
