@@ -8,7 +8,7 @@ window.addEventListener('DOMContentLoaded', (event) => {
             xhttp.onreadystatechange = function() {
               if (this.readyState == 4 && this.status == 200) {
                   //changes number
-                  location.reload()
+                  location.reload(false)
               }
             };
             xhttp.open("GET", "/resetbudget", true);
