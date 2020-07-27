@@ -17,9 +17,9 @@ class AddAmazonForm(FlaskForm):
     amazonlink = StringField("Add A Product:", validators=[DataRequired(), ValidASIN], id="amazonlink")
 
 class AddBudgetForm(FlaskForm):
-    monthlyincome = DecimalField("Monthly Income:", validators=[DataRequired()])
-    fixedexpenses = DecimalField("Fixed Expenses:", validators=[DataRequired()], places=2)
-    percentsavings = DecimalField(r"% of income to save:", validators=[DataRequired(), NumberRange(min=1, max=99), ValidSavings])
+    monthlyincome = DecimalField("Monthly Income:", validators=[DataRequired(message="Must be a Valid Decimal")])
+    fixedexpenses = DecimalField("Fixed Expenses:", validators=[DataRequired(message="Must be a Valid Decimal")], places=2)
+    percentsavings = DecimalField(r"% of income to save:", validators=[DataRequired(message="Must be a Valid Decimal"), NumberRange(min=1, max=99), ValidSavings])
 
 class BuyForm(FlaskForm):
     money = DecimalField("Spend Money:", validators=[DataRequired()])
