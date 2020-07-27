@@ -35,3 +35,11 @@ def ValidSavings(form, field):
 
     if expense_percent + float('0.' + str(savings_percent)) > 1:
         raise ValidationError("Not enough money")
+
+def Valid_USD(form, field):
+    money = str(field.data)
+    if '.' in money:
+        if money[-1].isnumeric():
+            if len(money.split('.')[1]) > 2:
+                raise ValidationError("Must be a valid Decimal")
+

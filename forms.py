@@ -1,7 +1,7 @@
 from flask_wtf import FlaskForm, RecaptchaField, Recaptcha
 from wtforms import StringField, SubmitField, PasswordField, DecimalField
 from wtforms.validators import DataRequired, Length, EqualTo, NumberRange
-from validators import UniqueRequired, VaildUsername, ValidPassword, ValidASIN, ValidSavings
+from validators import UniqueRequired, VaildUsername, ValidPassword, ValidASIN, ValidSavings, Valid_USD
 
 class LoginForm(FlaskForm):
     username = StringField("Username:", validators=[DataRequired(), VaildUsername], id="username")
@@ -17,9 +17,9 @@ class AddAmazonForm(FlaskForm):
     amazonlink = StringField("Add A Product:", validators=[DataRequired(), ValidASIN], id="amazonlink")
 
 class AddBudgetForm(FlaskForm):
-    monthlyincome = DecimalField("Monthly Income:", validators=[DataRequired(message="Must be a Valid Decimal")])
-    fixedexpenses = DecimalField("Fixed Expenses:", validators=[DataRequired(message="Must be a Valid Decimal")], places=2)
-    percentsavings = DecimalField(r"% of income to save:", validators=[DataRequired(message="Must be a Valid Decimal"), NumberRange(min=1, max=99), ValidSavings])
+    monthlyincome = DecimalField("Monthly Income:", validators=[DataRequired(message="Must be a Valid Decimal"), Valid_USD])
+    fixedexpenses = DecimalField("Fixed Expenses:", validators=[DataRequired(message="Must be a Valid Decimal"), Valid_USD], places=2)
+    percentsavings = DecimalField(r"% of income to save:", validators=[DataRequired(message="Must be a Valid Decimal"), NumberRange(min=1, max=99), ValidSavings, Valid_USD])
 
 class BuyForm(FlaskForm):
-    money = DecimalField("Spend Money:", validators=[DataRequired()])
+    money = DecimalField("Spend Money:", validators=[DataRequired(), Valid_USD])

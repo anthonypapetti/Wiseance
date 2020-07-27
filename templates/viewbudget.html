@@ -26,6 +26,13 @@
                         <div class="col-lg-5"></div>
                     </div>
                 </div>
+                {% if form.money.errors %}
+                    <ul class="errors">
+                        {% for error in form.money.errors %}
+                            <li>{{error}}</li>
+                        {% endfor %}
+                    </ul>
+                {% endif %}
                 <button type="submit" class="btn btn-primary">Submit</button>
             </form>
             <div class="p-2">
