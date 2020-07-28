@@ -8,7 +8,11 @@ window.addEventListener('DOMContentLoaded', (event) => {
             xhttp.onreadystatechange = function() {
               if (this.readyState == 4 && this.status == 200) {
                   //changes number
-                  location.reload(false)
+                  var new_money = this.responseText.slice(1, -2)
+                  console.log(new_money)
+                  console.log(this.responseText)
+                  var moneytag = document.getElementById("money")
+                  moneytag.innerText = new_money
               }
             };
             xhttp.open("GET", "/resetbudget", true);

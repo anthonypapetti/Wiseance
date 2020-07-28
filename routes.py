@@ -138,7 +138,6 @@ def makebudget():
         saving_money = Decimal(form.monthlyincome.data) * percentify(form.percentsavings.data)
         #amount of money to spend
         spending_money = Decimal(form.monthlyincome.data) - Decimal(form.fixedexpenses.data) - saving_money
-        print(f"Savings: {saving_money}, Spending: {spending_money}")
 
         #Save data to budget
         #check if data already exists
@@ -180,7 +179,6 @@ def viewbudget():
     else:
         img_path = None
     if form.validate_on_submit():
-        print("REEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEE")
         mybudget.spending_left -= form.money.data
         db.session.commit()
     return render_template("viewbudget.html", form=form, img_path=img_path, data = mybudget)

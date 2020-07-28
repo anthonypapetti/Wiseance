@@ -1,7 +1,7 @@
 {% extends "layout.html" %}
 
 {% block title %}View Budget{% endblock %}
-{% block scripts %}<script src="{{url_for('static', filename='js/budget.js', version=4)}}"></script>{% endblock %}
+{% block scripts %}<script src="{{url_for('static', filename='js/budget.js', version=11)}}"></script>{% endblock %}
 
 {% block content %}
     <div class="text-center">
@@ -10,9 +10,9 @@
                 <img src="{{ url_for('static', filename=img_path) }}">
             
             {% if data.spending_left|is_negative is sameas true %}
-                <h2>You've spent {{data.spending_left|usd}} too much:</h2>
+                <h2>You've spent <span id="money">{{data.spending_left|usd}}</span> too much:</h2>
             {% else %}
-                <h2>You have {{data.spending_left|usd}} left to spend:</h2>
+                <h2>You have <span id="money">{{data.spending_left|usd}}</span> left to spend:</h2>
             {% endif %}
             <form action="/viewbudget" method="POST">
                 {{form.csrf_token}}
