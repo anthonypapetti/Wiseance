@@ -40,13 +40,19 @@ def get_amzn_data(link):
     soup = BeautifulSoup(page.content, "lxml")
 
     #gets title and page
-    title = soup.find(id="productTitle").get_text().strip()
+    try:
+        title = soup.find(id="productTitle").get_text().strip()
+    except:
+        title = "Title Not Found"
     amazon_price_ids = ["price_inside_buybox", "priceblock_ourprice", "priceblock_dealprice", "price", "newBuyBoxPrice"]
     for id in amazon_price_ids:
         regprice = soup.find(id=id)
+        print(regprice)
         if regprice:
             regprice = regprice.get_text().strip()
             break
+    
+    
     return {"title":title,"regprice":regprice}
 
 
