@@ -16,10 +16,7 @@ app.jinja_env.filters["usd"] = usd
 
 @app.route("/")
 def index():
-    if session.get("user_id"):
-        return render_template("landing.html")
-    else:
-        return render_template("layout.html")
+    return render_template("landing.html")
 
 @app.route("/login", methods=["GET", "POST"])
 def login():
