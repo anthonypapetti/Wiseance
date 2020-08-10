@@ -1,6 +1,6 @@
 # Wiseance
 
-A riff on Wise + Finance, this small website is all about saving and managing money. It's a combination of
+A riff on Wise + Finance, this small web app is all about saving and managing money. It's a combination of
 a budgeting tool to keep track of spending money, and an amazon wishlist that gets the price of items, and
 alerts you if there is a sale or price drop.
 
