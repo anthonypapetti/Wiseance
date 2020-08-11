@@ -6,7 +6,13 @@ alerts you if there is a sale or price drop.
 
 ## Getting Started
 
-A step by step series of examples that tell you how to get a development env running
+Install python, preferably 3.7.4 from https://www.python.org/downloads/release/python-374/
+
+clone the repository to your local machine
+
+```
+git clone https://github.com/anthonypapetti/Wiseance.git
+```
 
 Install the required packages from requirements.txt
 
@@ -38,7 +44,6 @@ You're all set to run this project. Just run run.py and you're good to go!
 * [Flask-WTF](https://flask-wtf.readthedocs.io/en/stable/) - Form validation
 * [BeautifulSoup4](https://www.crummy.com/software/BeautifulSoup/bs4/doc/) - Web scraper
 * [lxml](https://lxml.de/) - Alternative web scraper
-* [Werkzeug](https://werkzeug.palletsprojects.com/en/1.0.x/) - Password Validation
 * [matplotlib](https://matplotlib.org/) - Data visualisation
 
 
